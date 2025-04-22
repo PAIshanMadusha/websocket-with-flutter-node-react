@@ -36,6 +36,37 @@ flutter_client/android/app/profile/
 flutter_client/android/app/release/
 
 # ============================
+# React (react_client)
+# ============================
+
+# React client logs
+react_client/logs
+react_client/*.log
+react_client/npm-debug.log*
+react_client/yarn-debug.log*
+react_client/yarn-error.log*
+react_client/pnpm-debug.log*
+react_client/lerna-debug.log*
+
+# React client build output
+react_client/node_modules/
+react_client/dist/
+react_client/dist-ssr/
+react_client/*.local
+
+# Editor settings inside react_client
+react_client/.vscode/*
+!react_client/.vscode/extensions.json
+react_client/.idea/
+react_client/.DS_Store
+react_client/*.suo
+react_client/*.ntvs*
+react_client/*.njsproj
+react_client/*.sln
+react_client/*.sw?
+
+
+# ============================
 # Node.js (node_backend)
 # ============================
 
