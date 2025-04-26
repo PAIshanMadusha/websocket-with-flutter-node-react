@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import './App.css'
-function App() {
+import './App.css';
 
-  //State to Track the Socket Connection
+function App() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<{ text: string; self: boolean }[]>([]);
   const [userMessage, setUserMessage] = useState<string>("");
 
-  //Connect to the Server
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:4000");
     ws.onopen = () => {
@@ -15,20 +13,18 @@ function App() {
       setSocket(ws);
     };
     ws.onmessage = (event) => {
-      console.log("Received a Message From the Server");
-      //Convert to Text
       if (event.data instanceof Blob) {
         const reader = new FileReader();
         reader.onload = () => {
           const text = reader.result as string;
-          setMessages((prevMessages) => [...prevMessages, text]);
+          setMessages(prev => [...prev, { text, self: false }]);
         };
         reader.readAsText(event.data);
       } else if (typeof event.data === "string") {
-        setMessages((prevMessages) => [...prevMessages, event.data]);
-      };
+        setMessages(prev => [...prev, { text: event.data, self: false }]);
+      }
     };
-    ws.close = () => {
+    ws.onclose = () => {
       console.log("Disconnected from the Server");
       setSocket(null);
     };
@@ -36,26 +32,46 @@ function App() {
       console.error(error);
       ws.close();
     };
-    return ()=>{
+    return () => {
       ws.close();
     };
   }, []);
 
+  const handleSendMessage = () => {
+    if (userMessage.trim() !== "") {
+      socket?.send(userMessage);
+      setMessages((prev) => [...prev, { text: userMessage, self: true }]);
+      setUserMessage("");
+    }
+  };
+
   if (!socket) {
-    return (<div><h1>Connecting to the Server...</h1></div>)
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <h1 className="text-2xl font-bold">Connecting to Server...</h1>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black-50 w-screen">
-      <h1 className="text-3xl font-bold mb-4">Websocket Chat</h1>
-      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-4">
-        <div className="h-64 overflow-y-auto border border-gray-300 rounded-lg mb-4 p-2">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-4">
+      <h1 className="text-4xl font-bold mb-6 text-blue-800">💬 Simple Chat App</h1>
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-4 flex flex-col">
+        <div className="flex-1 overflow-y-auto mb-4 space-y-2 h-96">
           {messages.map((message, index) => (
             <div
               key={index}
-              className="p-2 border-b last:border-b-0 text-black"
+              className={`flex ${message.self ? 'justify-end' : 'justify-start'}`}
             >
-              {message}
+              <div
+                className={`max-w-xs p-3 rounded-lg ${
+                  message.self
+                    ? 'bg-blue-500 text-white rounded-br-none'
+                    : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                }`}
+              >
+                {message.text}
+              </div>
             </div>
           ))}
         </div>
@@ -64,15 +80,13 @@ function App() {
             type="text"
             value={userMessage}
             onChange={(e) => setUserMessage(e.target.value)}
-            className="flex-grow border border-gray-300 rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+            className="flex-grow border border-gray-300 rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 text-black mr-2"
             placeholder="Type your message..."
           />
           <button
-            onClick={() => {
-              socket.send(userMessage);
-              setUserMessage("");
-            }}
-            className="bg-blue-500 text-white rounded-r-lg px-4 hover:bg-blue-600 transition"
+            onClick={handleSendMessage}
+            className="bg-blue-500 text-white px-6 rounded-r-lg hover:bg-blue-600 transition-all"
           >
             Send
           </button>
@@ -82,4 +96,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
