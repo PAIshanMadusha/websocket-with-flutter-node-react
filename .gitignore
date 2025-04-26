@@ -74,7 +74,7 @@ react_client/*.sw?
 node_backend/node_modules/
 
 # Environment variables
-node_backend/.env
+#(Not Necessary for This) node_backend/.env 
 
 # Logs
 node_backend/npm-debug.log*
