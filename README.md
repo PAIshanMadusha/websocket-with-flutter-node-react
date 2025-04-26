@@ -1,4 +1,4 @@
-# 💬 Websocket-With-Flutter-Node-React: Simple Chat App
+# 💬 Websocket: Simple Chat App
 
 A simple real-time chat app built with Flutter, React, and a Node.js WebSocket server. This project demonstrates the power of WebSocket communication across mobile and web platforms using a lightweight Node.js backend.
 
@@ -174,10 +174,14 @@ npm run dev
 
 ## 📸 System Screenshots:
 
+<div align="center">
+
 | Flutter App 📱 | React Web App 💻 |
-|:---------------:|:-----------------:|
+|:--------------:|:---------------:|
 | Chat Interface: | Chat Interface: |
-| <p align="center"> <img src="https://github.com/user-attachments/assets/31bd3a8e-adea-495a-b5fb-9fa3831d14e2" alt="Screenshot 1" width="185"> </p> | <p align="center"> <img src="https://github.com/user-attachments/assets/da8083e8-9cde-4cea-8afa-972dd00430b2" alt="Screenshot 1" width="375"></p> |
+| <p align="center"> <img src="https://github.com/user-attachments/assets/31bd3a8e-adea-495a-b5fb-9fa3831d14e2" alt="Flutter Chat Screenshot" width="195"> </p> | <p align="center"> <img src="https://github.com/user-attachments/assets/da8083e8-9cde-4cea-8afa-972dd00430b2" alt="React Chat Screenshot" width="385"> </p> |
+
+</div>
 
 ---
 
